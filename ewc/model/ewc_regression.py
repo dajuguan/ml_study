@@ -14,6 +14,7 @@ class ElasticWeightConsolidation:
         self.weight = weight
         self.crit = crit
         self.optimizer = optim.Adam(self.model.parameters(), lr, weight_decay=0.0)
+        self.loss = 0.0
 
     def _update_mean_params(self):
         for param_name, param in self.model.named_parameters():
@@ -56,6 +57,7 @@ class ElasticWeightConsolidation:
         loss = self._compute_consolidation_loss(self.weight) + self.crit(output, target)
         self.optimizer.zero_grad()
         loss.backward()
+        self.loss = loss
         # print("loss:", loss)    
         self.optimizer.step()
 
